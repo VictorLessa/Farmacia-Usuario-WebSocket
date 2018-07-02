@@ -1,0 +1,26 @@
+
+<select id="selecao">
+    <option value="0">---escolha um produto---</option>
+    <option value="dipirona">Dipirona</option>
+    <option value="morfina">Morfina</option>
+</select>
+<input type="submit" id="lista">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js
+"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    //const io = require('socket.io-client')
+    const socket = io('http://localhost:3636')
+    socket.on('connect', function(){
+            socket.emit('criar', {sala: 'sala1'})
+        })
+    $('#lista').click( function(){
+        const produto = document.getElementById('selecao').value;
+        socket.emit('lista', {produtos: produto, id: 'sala1'})
+    })
+    socket.on('recebendo confirmacao', function(data){
+        alert('Temos'+ data.produto)
+    })
+    
+</script>
