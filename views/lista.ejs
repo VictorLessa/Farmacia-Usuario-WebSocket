@@ -1,26 +1,77 @@
-
-<select id="selecao">
-    <option value="0">---escolha um produto---</option>
-    <option value="dipirona">Dipirona</option>
-    <option value="morfina">Morfina</option>
-</select>
-<input type="submit" id="lista">
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js
-"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-    //const io = require('socket.io-client')
-    const socket = io('http://localhost:3636')
-    socket.on('connect', function(){
-            socket.emit('criar', {sala: 'sala1'})
-        })
-    $('#lista').click( function(){
-        const produto = document.getElementById('selecao').value;
-        socket.emit('lista', {produtos: produto, id: 'sala1'})
-    })
-    socket.on('recebendo confirmacao', function(data){
-        alert('Temos'+ data.produto)
-    })
-    
-</script>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Usuario</title>
+        <style>
+            .itens{
+                border: solid 1px black;
+                display: inline-flex;
+                width: 50%;
+            }
+            .botao{
+                width: 50%;
+                justify-content: center;
+                display: flex;
+                align-items: center;
+            }
+            .nome{
+                width: 50%;
+                display: inline-flex;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <select id="selecao">
+            <option value="0">---escolha um produto---</option>
+            <option value="dipirona">Dipirona</option>
+            <option value="morfina">Morfina</option>
+        </select>
+        <input type="submit" id="listas">
+        <ul id="lista">
+            <!--<li class="itens">
+                <div class="nome">
+                    <p>Morfina </p>
+                    <span> - R$50</span>
+                </div>
+                <div class="botao" onclick="add('morfina')">
+                    <input type="button" value="Add Carrinho">
+                </div>
+            </li>!-->
+        </ul>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js
+        "></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            //const io = require('socket.io-client')
+            const socket = io('http://localhost:3636')
+            socket.on('connect', function(){
+                socket.emit('criar', {sala: 'sala1'})
+            })
+            socket.on('lista de produtos', function(pr){
+                for(var i = 0; i < pr.length; i++) {  
+                    $('#lista').append(
+                        '<li class="itens">'+
+                            '<div class="nome">'+
+                                '<p>'+pr[i].nome+'</p>'+
+                            '</div>'+
+                            '<div class="botao" onclick="add('+"'"+pr[i].id+"'"+')">'+
+                                '<input type="button" value="Add Carrinho">'+
+                                '</div>'+
+                        '</li>'    
+                    ) 
+                }               
+            })
+            /*$('#lista').click( function(){
+                const produto = document.getElementById('selecao').value;
+                
+            })*/
+            socket.on('recebendo confirmacao', function(data){
+                alert('Temos'+ data.produto)
+            })
+            function add(e){ 
+                socket.emit('lista', {produtos: e, id: 'sala1'})
+            }
+        </script>
+</body>
+</html>

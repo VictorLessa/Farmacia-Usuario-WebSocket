@@ -12,7 +12,7 @@ app.use(bodyParse.json())
 
 consgin()
     .include('rotas')
-    .then('config/db')
+    .then('config/db.js')
     .then('modulos')
     .into(app)
 

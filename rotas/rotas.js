@@ -32,8 +32,5 @@ module.exports = (app)=>{
         })
         
     })
-    app.get('lista', (req, res)=>{
-        const [produtos] = req.body
-        
-    })
+
 }
