@@ -1,35 +1,34 @@
+const sql = require('../controllers/sql')
 module.exports = (app)=>{
-    app.get('/', (req, res, next)=>{
+    //rota para pagina de login do usuario
+    app.get('/', (req, res)=>{
         res.render('home')
-        next()
     })
-    app.post('/usuario', (req, res, next)=>{
+    //rota para validação do usuario
+    app.post('/usuario', async(req, res)=>{
         const {nome, senha} = req.body
-        const db = require('../config/db.js')
-        db.query('SELECT * FROM login WHERE nome=? and senha =?',[nome, senha], (error, results)=>{
-            if (results[0] != undefined) {
-                res.render('lista')
-            }else {
-                res.send('n encontrado')
-            }
-                            
-        })
-        
+        if(await sql().login(nome, senha)) {
+            res.render('lista')
+        }else {
+            res.render('home')
+        }
     })
+    //rota para visualizar todos os usuarios do db de usuarios
+    app.get('/all', async (req, res)=>{
+        res.send( await sql().all())
+    })
+    //rota para o login da farmamcia
     app.get('/far', (req, res)=>{
         res.render('loginpha')
     })
-    app.post('/pha', (req, res, next)=>{
+    //validação da farmacia
+    app.post('/pha', async(req, res, next)=>{
         const {nome, senha} = req.body
-        const db = require('../config/db.js')
-        db.query('SELECT * FROM farmacias WHERE nome=? and senha =?',[nome, senha], (error, results)=>{
-            if (results[0] != undefined) {
-                res.render('pharmacy')
-            }else {
-                res.send('n encontrado')
-            }
-                            
-        })
+        if(await sql().loginphar(nome, senha)){
+            res.render('pharmacy')
+        }else {
+            res.render('loginpha')
+        }
         
     })
 

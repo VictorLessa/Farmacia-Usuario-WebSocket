@@ -6,8 +6,8 @@ const server = app.listen(3636, ()=>{
     console.log('funciona o servidor')
 })
 
-const produtos =[{'nome': 'Morfina', 'preço': 'R$50', 'id': 'morfina'},
-{'nome': 'Dipirona', 'preço': 'R$50', 'id': 'dipirona'}]
+const produtos =[{'nome': 'Morfina', 'preco': 'R$50', 'id': 'morfina'},
+{'nome': 'Dipirona', 'preco': 'R$50', 'id': 'dipirona'}]
 
 var io = require('socket.io').listen(server)
 
